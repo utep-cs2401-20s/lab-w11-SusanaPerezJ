@@ -8,6 +8,7 @@ public class newSorting {
         if(arr.length <= size){
             //do quickSort
             quickSort(arr);
+            return;
         }
         int middle = arr.length/2;
         int[] left = new int[middle];
@@ -28,39 +29,45 @@ public class newSorting {
         mergeSortedHalves(arr, left, right);
     }
     private void quickSort(int[] arr){
-        quickSort(arr, 1, arr.length-1);
+        quickSort(arr, 0, arr.length);
     }
-    private void quickSort(int arr[], int less, int more) {
+    private void quickSort(int[] arr, int less, int more) {
         //base case: if the array has only one element
-        if(arr.length == 1){
+        if(arr.length <= 1){
             return;
         }
-        int pivot = arr[0];
-        int start = 1;
-        int end = arr.length-1;
-        while(less < more){
-            if(less <= arr[end] && arr[less] <= pivot){
-                less++;
-            }
-            if(more >= arr[start] && arr[more] > pivot){
-                more--;
-            }
-            if(less > more){
-                //swap
-                int temp = arr[less];
-                arr[less] = arr[more];
-                arr[more] = temp;
+        if(less < more && less >= 0){
+            //call partition method
+            int partition = partitionArray(arr, less, more);
+
+            //recursive calls on both sides
+            //left side
+            quickSort(arr, less, partition-1);
+            //right side
+            quickSort(arr, partition+1, more);
+        }
+    }
+    public int partitionArray(int[] arr, int begin, int end){
+        int pivot = arr[begin];
+        for(int k = begin; k < end; k++){
+            if(arr[k] > pivot){
+                int temp = pivot;
+                pivot = arr[k];
+                arr[begin] = temp;
+                begin++;
+            }else if(arr[k] < pivot){
+                int temp = arr[k];
+                arr[k] = pivot;
+                arr[begin] = temp;
+                begin++;
             }
         }
-        int temp = arr[start-1];
-        arr[start-1] = arr[more];
-        arr[more] = temp;
-        //recursive calls on both sides
-
+        return end;
     }
     private void mergeSortedHalves(int[] arr, int[] left, int[] right){
         int l = 0;
         int r = 0;
+        //boolean variable to check if both halves still have elements to merge
         boolean end = false;
         for(int k = 0; k < arr.length; k++) {
             if(l < left.length && r < right.length){
@@ -74,8 +81,8 @@ public class newSorting {
                     arr[k] = right[r];
                     r++;
                 }
-
             }else{
+                //if there is a half that has no elements left, populate the rest of the array with the other half
                 if(l >= left.length){
                     arr[k] = right[r];
                     r++;
