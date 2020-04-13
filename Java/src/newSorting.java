@@ -1,12 +1,8 @@
 public class newSorting {
-    public void main(String[] args) {
-        int[] arr = {6,5,4,3,2,1};
-       newSorting(arr, 4);
-    }
     public void newSorting(int[] arr, int size){
         //base case
         if(arr.length <= size){
-            //do quickSort
+            //call quickSort method
             quickSort(arr);
             return;
         }
@@ -23,7 +19,9 @@ public class newSorting {
                 k++;
             }
         }
+        //recursive call on left side
         newSorting(left, size);
+        //recursive call on right side
         newSorting(right,size);
         //MERGE
         mergeSortedHalves(arr, left, right);
@@ -39,7 +37,6 @@ public class newSorting {
         if(less < more && less >= 0){
             //call partition method
             int partition = partitionArray(arr, less, more);
-
             //recursive calls on both sides
             //left side
             quickSort(arr, less, partition-1);
@@ -48,13 +45,16 @@ public class newSorting {
         }
     }
     public int partitionArray(int[] arr, int begin, int end){
+        //select pivot
         int pivot = arr[begin];
         for(int k = begin; k < end; k++){
+            //if the element is greater than the pivot
             if(arr[k] > pivot){
                 int temp = pivot;
                 pivot = arr[k];
                 arr[begin] = temp;
                 begin++;
+            //if the element is less than the pivot
             }else if(arr[k] < pivot){
                 int temp = arr[k];
                 arr[k] = pivot;
@@ -73,7 +73,7 @@ public class newSorting {
             if(l < left.length && r < right.length){
                 end = true;
             }
-            if (end) {
+            if (end){
                 if (right[r] >= left[l]) {
                     arr[k] = left[l];
                     l++;
